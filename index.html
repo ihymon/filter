@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User data base filter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .wrap {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .userContainer {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .userItem {
+            /*            background-color: aquamarine;*/
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+            justify-content: space-between;
+            box-shadow: 0 0 10px #eee;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .userItem img {
+            width: 150px;
+            border-radius: 20px;
+        }
+
+        .userItem span {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .userItem .row {
+            width: 300px;
+            display: flex;
+            justify-content: space-around;
+            margin: 10px;
+        }
+
+        .userItem button {
+            background-color: darkseagreen;
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 50px;
+        }
+
+        .buttons button {
+            background-color: dodgerblue;
+            padding: 10px 20px;
+            color: #fff;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0 3px 10px dodgerblue;
+        }
+
+        .popup {
+            width: 300px;
+            height: 200px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -150px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            display: none;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+
+        <div class="buttons">
+            <div class="btnGroup">
+                <button id="alphabet">Алфавіт</button>
+                <button id="alphabetReverce">Алфавіт реверс</button>
+            </div>
+            <div class="btnGroup">
+                <button id="age">Молодші</button>
+                <button id="ageReverce">Старші</button>
+            </div>
+        </div>
+
+        <div class="userContainer"></div>
+    </div>
+
+    <div class="popup">
+       
+    </div>
+
+
+    <script>
+        let db = [{
+                name: 'Victor',
+                code: 1601416,
+                age: 14,
+                length: 160,
+                weight: 42,
+                money: 252,
+                pic: 'man.png'
+            },
+            {
+                name: 'Taras',
+                code: 1423243,
+                age: 19,
+                length: 180,
+                weight: 50,
+                money: 1000,
+                pic: 'man.png'
+            },
+            {
+                name: 'Alex',
+                code: 4533333,
+                age: 10,
+                length: 110,
+                weight: 45,
+                money: 10,
+                pic: 'man.png'
+            },
+            {
+                name: 'Nastya',
+                code: 89878789,
+                age: 20,
+                length: 160,
+                weight: 60,
+                money: 776,
+                pic: 'woman.png'
+            },
+            {
+                name: 'Oleg',
+                code: 66787998,
+                age: 30,
+                length: 180,
+                weight: 90,
+                money: 12323,
+                pic: 'man.png'
+            },
+            {
+                name: 'Valera',
+                code: 76787876,
+                age: 17,
+                length: 190,
+                weight: 110,
+                money: 12,
+                pic: 'man.png'
+            },
+            {
+                name: 'John',
+                code: 34343422,
+                age: 9,
+                length: 90,
+                weight: 30,
+                money: 776,
+                pic: 'man.png'
+            },
+            {
+                name: 'Yura',
+                code: 7888765,
+                age: 14,
+                length: 150,
+                weight: 56,
+                money: 8998,
+                pic: 'man.png'
+            },
+            {
+                name: 'Andrii',
+                code: 8898788,
+                age: 18,
+                length: 170,
+                weight: 77,
+                money: 677,
+                pic: 'man.png'
+            },
+            {
+                name: 'Yulia',
+                code: 1215456,
+                age: 7,
+                length: 80,
+                weight: 34,
+                money: 0,
+                pic: 'woman.png'
+            }
+        ]
+
+
+        function showUser() {
+            for (let el of db) {
+                $('.userContainer').append(`<div class='userItem'>
+               <img src='./img/${el.pic}'>
+              
+                <span>${el.name}<span> 
+                <div class='row'>
+                     <span>Вік:<span> 
+                     <span>${el.age}<span> 
+                </div>
+                <button class='userInfo' id='c${el.code}'>Інформація</button>
+            </div>`);
+            }
+        }
+        showUser();
+        // a-z
+        $('#alphabet').click(function() {
+            db.sort(function(a, b) {
+                if (a.name < b.name) {
+                    return -1;
+                }
+            });
+            $('.userContainer').empty();
+            showUser();
+        })
+
+        //reverse show z-a
+        $('#alphabetReverce').click(function() {
+            db.sort(function(a, b) {
+                if (a.name > b.name) {
+                    return -1;
+                }
+            });
+            $('.userContainer').empty();
+            showUser();
+        })
+
+
+        $('#age').click(function() {
+            db.sort(function(a, b) {
+                return a.age - b.age;
+            })
+            $('.userContainer').empty();
+            showUser();
+        })
+        $('#ageReverce').click(function() {
+            db.sort(function(a, b) {
+                return b.age - a.age;
+            })
+            $('.userContainer').empty();
+            showUser();
+        })
+
+        $('.userInfo').click(function(e) {
+
+            $('.popup').css('display', 'flex');
+            $('.wrap').css('filter', 'blur(20px)');
+
+            let userID = (e.target.id).substring(1);
+            for (let el of db) {
+                if (userID == el.code) {
+                    $('.popup').text(el.money+'$');
+                }
+            }
+        })
+
+
+        $('.popup').click(function(e) {
+            $('.popup').css('display', 'none');
+            $('.wrap').css('filter', 'blur(0)');
+        })
+    </script>
+</body></html>
